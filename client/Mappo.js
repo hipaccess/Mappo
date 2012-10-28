@@ -1,17 +1,32 @@
 
-	
+var AppRouter = Backbone.Router.extend({
+	        routes: {
+	            "": "home",
+				"create":"create"
+	        },
+		    initialize:function () {
+		        $('.back').live('click', function(event) {
+		            window.history.back();
+		            return false;
+		        });
+		        this.firstPage = true;
+		    },
+			home: function(){
+				this.changePage( new MapView());
+			},
+			create: function(){
+				console.error('action not supported yet');
+			},
+			changePage:function (page) {
+		        page.render();
+		        $('body').append($(page.el));
+		    }
+});
+
+// on document ready	
 Meteor.startup(function () {
 	
-	var AppRouter = Backbone.Router.extend({
-		        routes: {
-		            "*actions": "getCreateMapPageView"
-		        },
-		        getCreateMapPageView: function( ) {
-			 	  new CreateMapPageView( 
-						{ el: $("#content") }).render();
-
-		        }
-		    });
+	// init and start router
 	var router = new AppRouter;
 	Backbone.history.start();
 	
