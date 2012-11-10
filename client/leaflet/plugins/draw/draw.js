@@ -54,16 +54,21 @@
 				});
 		
 		this.map.on('draw:poly-created', function (e) {
+					console.log(e.poly);
 					drawnItems.addLayer(e.poly);
 				});
 		this.map.on('draw:rectangle-created', function (e) {
+					console.log(e.rect);
 					drawnItems.addLayer(e.rect);
 				});
 		this.map.on('draw:circle-created', function (e) {
+					var feature = L.formats.GeoJson.write( e.circ );
+					console.log(feature);
 					drawnItems.addLayer(e.circ);
 				});
 		this.map.on('draw:marker-created', function (e) {
 					var feature = L.formats.GeoJson.write( e.marker );
+					console.log(feature);
 					Features.insert( feature );
 					e.marker.bindPopup('A popup!');
 					drawnItems.addLayer(e.marker);

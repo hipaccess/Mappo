@@ -1,0 +1,49 @@
+NewClass
+_container: SVGGElement
+_holePoints: Array[0]
+_latlngs: Array[5]
+_leaflet_id: 42
+_map: NewClass
+_originalPoints: Array[5]
+_parts: Array[1]
+_path: SVGPathElement
+editing: NewClass
+options: Object
+__proto__: F
+ draw.js:61
+NewClass -> CIRCLE
+_container: SVGGElement
+_latlng: L.LatLng
+_leaflet_id: 44
+_mRadius: 417877.60250017134
+_map: NewClass
+_path: SVGPathElement
+_point: L.Point
+_radius: 85
+options: Object
+__proto__: F
+ draw.js:65
+NewClass
+_container: SVGGElement
+_holePoints: Array[0]
+_latlngs: Array[3]
+_leaflet_id: 53
+_map: NewClass
+_originalPoints: Array[3]
+_parts: Array[1]
+_path: SVGPathElement
+editing: NewClass
+options: Object
+__proto__: F
+ draw.js:57
+NewClass
+_container: SVGGElement
+_latlngs: Array[4]
+_leaflet_id: 61
+_map: NewClass
+_originalPoints: Array[4]
+_parts: Array[1]
+_path: SVGPathElement
+editing: NewClass
+options: Object
+__proto__: F

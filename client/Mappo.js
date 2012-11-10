@@ -15,7 +15,7 @@ var AppRouter = Backbone.Router.extend({
 		        this.firstPage = true;
 		    },
 			home: function(){
-				this.changePage( new MapView());
+				this.changePage( new MapViewPage());
 			},
 			create: function(){
 				console.error('action not supported yet');
