@@ -11,100 +11,59 @@
 	// plugin version
 	L.formats.GeoJson.VERSION = '0.1';
 	
-	
-	var CircleBuilder = {
-		canHandle: function( geometry ){
-			if ( geometry.getRadius && geometry.getLatLng ){
-				return true;
-			} else {
-				return false;
-			}
-		},
-		create: function( geometry ){
-			var coords = geometry.getLatLng();
-			var radius = geometry.getRadius();
-			return {
-				type:'Circle',
-				coordinates: [coords.lat, coords.lng],
-				radius: geometry.getRadius()
-			};
-		}
+	function createPolygon( layer ){
+		var feature = createFeature('Polygon');
+		var coords = [];
+	    $.each( layer.getLatLngs(), function(index,value) {
+	        coords.push([value.lng, value.lat]);
+	    });
+		feature.geometry.coordinates.push( coords );
+		return feature;
 	};
-	var PointBuilder = {
-		canHandle: function( geometry ){
-			if ( geometry.getLatLng ){
-				return true;
-			} else {
-				return false;
-			}
-		},
-		create: function( geometry ){
-			var coords = geometry.getLatLng();
-			return {
-				type: "Point", 
-				coordinates: [ coords.lat, coords.lng ]
-			};
-		}
-	};
-	var PolygonBuilder = {
-		canHandle: function( geometry ){
-			if ( geometry.getBounds ){
-				return true;
-			} else {
-				return false;
-			}
-		},
-		create: function( geometry ){
-			var bounds = geometry.getBounds();
-			var coords = bounds.toBBoxString().split(', ');
-			return {
-				type:'Polygon',
-				coordinates: coords
-			};
-		}
-	};
-	
-	var PolylineBuilder = {
-		canHandle: function( geometry ){
-			if ( geometry.getBounds ){
-				return true;
-			} else {
-				return false;
-			}
-		},
-		create: function( geometry ){
-			var bounds = geometry.getBounds();
-			var coords = bounds.toBBoxString().split(', ');
-			return {
-				type:'MultiLineString',
-				coordinates: coords
-			};
-		}
-	};
-	
-	var builders = [
-		CircleBuilder,
-		PointBuilder,
-		PolygonBuilder,
-		PolylineBuilder
-	];
 
-	L.formats.GeoJson.parse = function(){
-		
+	function createMultiLineString( layer ){
+		var feature = createFeature('MultiLineString');
+		var coords = [];
+	    $.each( layer.getLatLngs(), function(index,value) {
+	        coords.push([value.lng, value.lat]);
+	    });
+		feature.geometry.coordinates.push( coords );
+		return feature;
 	};
 	
-	L.formats.GeoJson.write = function( geometry ){
-		var builder = _.filter(builders, function(builder){
-			return builder.canHandle(geometry);
-		});
+	function createPoint( layer ){
+		var feature = createFeature('Point'); 
+		var latlng = layer.getLatLng();
+		feature.geometry.coordinates = [latlng.lng, latlng.lat];
+		return feature;
+	};
+
+	// adapted from https://github.com/CloudMade/Leaflet/issues/333
+	function createFeature( type, layer ){
+	    var feature = {
+	        "type": "Feature",
+	        "geometry": {
+	            "type": type,
+	            "coordinates": []
+	        },
+	    };
+
+	    return feature;
+	};
 	
-		if ( builder && builder.length > 0){
-			return builder[0].create( geometry );
-		} else {
-			console.error('unknown geometry');
-		}
+	
+	L.formats.GeoJson.layerToGeometry = function( layer ){
 		
-		
+		    if ( layer instanceof L.Polygon ){
+				return createPolygon(layer);
+			} else if ( layer instanceof L.Polyline ){
+				return createMultiLineString( layer);
+			} else if ( layer instanceof L.Marker ){
+				return createPoint(layer);
+			} else {
+				console.error('not supported layer');
+			}
+		    
 	};
 	
 }).call(this);

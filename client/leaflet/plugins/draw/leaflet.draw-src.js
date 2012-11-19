@@ -854,7 +854,7 @@ L.Control.Draw = L.Control.extend({
 			this.handlers.polygon.on('activated', this._disableInactiveModes, this);
 		}
 
-		if (this.options.rectangle) {
+		/*if (this.options.rectangle) {
 			this.handlers.rectangle = new L.Rectangle.Draw(map, this.options.rectangle);
 			this._createButton(
 				this.options.rectangle.title,
@@ -864,9 +864,9 @@ L.Control.Draw = L.Control.extend({
 				this.handlers.rectangle
 			);
 			this.handlers.rectangle.on('activated', this._disableInactiveModes, this);
-		}
+		}*/
 
-		if (this.options.circle) {
+		/*if (this.options.circle) {
 			this.handlers.circle = new L.Circle.Draw(map, this.options.circle);
 			this._createButton(
 				this.options.circle.title,
@@ -876,7 +876,7 @@ L.Control.Draw = L.Control.extend({
 				this.handlers.circle
 			);
 			this.handlers.circle.on('activated', this._disableInactiveModes, this);
-		}
+		}*/
 
 		if (this.options.marker) {
 			this.handlers.marker = new L.Marker.Draw(map, this.options.marker);

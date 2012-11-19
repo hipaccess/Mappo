@@ -51,14 +51,78 @@
 		}
 
 	});
-	
-	L.plugins.MapViewer.create = function( config ){
+
+	L.plugins.MapViewer.create = function(config) {
 		var map = new MapView({
-				model: new Map
+			model: new Map
 		});
-		map.bind('map:ready', function( map ){
-				L.plugins.TileProviders.addTo( map );
-				L.plugins.Draw.addTo( map );
+		map.bind('map:ready', function(map) {
+
+			var group = L.plugins.serverFeatureGroup({
+				name: 'features',
+				map: map
+			}).render();
+			group.on('feature:added', function(feature) {
+
+				function highlightFeature(e) {
+					feature.setStyle({
+						weight: 5,
+						color: '#666',
+						dashArray: '',
+						fillOpacity: 0.7
+					});
+
+					if (!L.Browser.ie && !L.Browser.opera) {
+						feature.bringToFront();
+					}
+				};
+
+				function resetHighlight(e) {
+					feature.setStyle({
+						weight: 5,
+						color: '#0033ff',
+						dashArray: '',
+						fillOpacity: 0.7
+					});
+				};
+
+				function zoomToFeature(e) {
+					map.fitBounds(e.target.getBounds());
+				};
+				
+				function openNoteWindow(e) {
+					L.plugins.note( map  ).bindTo( feature ).show( );
+				};
+				
+				feature.on({
+						mouseover: highlightFeature,
+						mouseout: resetHighlight,
+						// click: zoomToFeature,
+						click:openNoteWindow
+				});
+				
+			
+				
+
+			});
+			
+
+			L.plugins.draw().addTo( map );
+			map.on('draw:poly-created', function(e) {
+				group.addLayer(e.poly);
+			});
+			map.on('draw:rectangle-created', function(e) {
+				group.addLayer(e.rect);
+			});
+			map.on('draw:circle-created', function(e) {
+				group.addLayer(e.circ);
+			});
+			map.on('draw:marker-created', function(e) {
+				group.addLayer(e.marker);
+			});
+
+			L.plugins.TileProviders.addTo(map);
+			
 		}, this);
 		map.render();
 		return map;

@@ -1,5 +1,4 @@
-Meteor.subscribe("features");
-Features = new Meteor.Collection("features");
+
 
 
 var AppRouter = Backbone.Router.extend({
