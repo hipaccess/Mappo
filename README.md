@@ -4,7 +4,7 @@ Mappo is a web application based on Meteor (http://meteor.com/) to edit maps in 
 
 ## Roadmap
 
-1. Choice of background layers.
+1. ~~Choice of background layers.~~
 2. Integration with Open Street Map.
 3. Searching.
 4. Print and export maps.
