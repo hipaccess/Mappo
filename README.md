@@ -25,7 +25,7 @@ Mappo is a web application based on Meteor (http://meteor.com/) to edit maps in 
 
 1. https://github.com/aurajs/aura
 
-## Theory
+### Theory
 
 1. Geometry of Interaction
 2. Game semantics
