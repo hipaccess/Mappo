@@ -12,6 +12,13 @@ Mappo is a web application based on Meteor (http://meteor.com/) to edit maps in 
 6. Online chat.
 7. Authentication.
 
+## Getting Started
+
+1. git clone https://github.com/mstn/Mappo.git
+2. cd Mappo
+3. [METEOR_HOME]/meteor
+4. connect to http://localhost:3000
+
 ## License
 
 Affero GPL
