@@ -3,13 +3,15 @@
 	
 	// save a reference for this function scope/context
 	var root = this;
-	var L = root.L;
 	var $ = root.jQuery;
-	L.formats = L.formats || {};
+	var Util = {};
+	Util.formats = {};
 	// expose plugin to the external world
-	L.formats.GeoJson = {};
+	Util.formats.GeoJson = {};
 	// plugin version
-	L.formats.GeoJson.VERSION = '0.1';
+	Util.formats.GeoJson.VERSION = '0.1';
+	
+	root.Util = Util;
 	
 	function createPolygon( layer ){
 		var feature = createFeature('Polygon');
@@ -52,7 +54,7 @@
 	};
 	
 	
-	L.formats.GeoJson.layerToGeometry = function( layer ){
+	Util.formats.GeoJson.layerToGeometry = function( layer ){
 		
 		    if ( layer instanceof L.Polygon ){
 				return createPolygon(layer);

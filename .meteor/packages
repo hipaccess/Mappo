@@ -5,7 +5,6 @@
 
 insecure
 preserve-inputs
-leaflet
 backbone
 bootstrap
 jquery
