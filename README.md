@@ -19,6 +19,17 @@ Mappo is a web application based on Meteor (http://meteor.com/) to edit maps in 
 3. [METEOR_HOME]/meteor
 4. connect to http://localhost:3000
 
+## UI Architecture
+
+### Similar approaches
+
+1. https://github.com/aurajs/aura
+
+## Theory
+
+1. Geometry of Interaction
+2. Game semantics
+
 ## License
 
 Affero GPL
