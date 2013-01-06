@@ -52,8 +52,8 @@ Meteor.startup(function () {
 		return {
 			render: function(){
 				var map = L.map( mapId, {
-					center: new L.LatLng(0, 0),
-					zoom: 5,
+					center: new L.LatLng(46, 11),
+					zoom: 8,
 					attributionControl: true
 				});
 				// https://github.com/CloudMade/Leaflet/issues/694
@@ -165,8 +165,45 @@ Meteor.startup(function () {
 		};
 	});
 	
+	Core.define('osm', [ ], function(context){
+		var geo = L.geoJson();
+		return {
+			ready: function( map ){
+				geo.addTo( map );
+				$.ajax({
+					// max mongohq limit: 100 documents
+					url: 'https://api.mongohq.com/databases/osm/collections/relation/documents?_apikey=ad1r3nxynhxls3vfq5q9&limit=100',
+					dataType: 'json',
+					success: function( data ){
+						_.each( data, function( relation ){
+							_.each( relation.members, function(member){
+								var filter = encodeURIComponent('{ "osmId":"' + member.ref + '"}');
+								$.ajax({
+									url:'https://api.mongohq.com/databases/osm/collections/way/documents?_apikey=ad1r3nxynhxls3vfq5q9&q='+filter,
+									dataType:'json',
+									success: function( data ){
+										_.each( data, function(way){
+											geo.addData( way.geometry );
+										});
+									},
+									failure: function( data ){
+										console.log( data );
+									}
+								});
+							});
+						});
+					
+					},
+					failure: function( data ){
+						console.log( data );
+					}
+				});
+			}
+		};
+	});
+	
 	Core.compose('mongo-draw', 'mongomap', 'draw');
-	Core.split('map', 'map-viewer', ['map-components', 'mongo-draw']);
+	Core.split('map', 'map-viewer', ['map-components', 'mongo-draw', 'osm']);
 	Core.compose('app', 'page', 'map');
 	
 	app = Core.start('app');
