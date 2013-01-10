@@ -37,7 +37,7 @@ function providerLeafletPlugin() {
 					var attribution = provider.options.attribution;
 					if (attribution.indexOf('{attribution.') != -1) {
 						provider.options.attribution = attribution.replace(/\{attribution.(\w*)\}/, function(match, attributionName) {
-							return providers[attributionName].options.attribution;
+							return providers[attributionName].options.attribution ;
 						});
 					}
 					L.TileLayer.prototype.initialize.call(this, provider.url, provider.options);

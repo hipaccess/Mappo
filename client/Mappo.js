@@ -165,57 +165,40 @@ Meteor.startup(function() {
 		};
 	});
 	
-		/*	{ 'tourism':'alpine_hut' },
-			{ 'amenity':'shelter' },
+		/*	
 			{ 'tourism':'information', 'attributes.information':'guidepost' },
-			{ 'natural':'peak' },
-			{ 'natural':'volcano' },
-			{ 'mountain_pass':'yes'},
-			{ 'tourism':'viewpoint'},
-			{ 'amenity':'drinking_water' } */
+			{ 'natural':'volcano' }, */
 
 	Core.define('osm', [], function(context) {
 		// response in MongoHQ cannot be bigger than 100 documents
 		var MAX_LIMIT = 100;
 		
-		var hutIcon = L.icon({
-		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/accommodation/alpine_hut.png',
-		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
-		    // iconSize:     [38, 95], // size of the icon
-		    // shadowSize:   [50, 64], // size of the shadow
-		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-		    // shadowAnchor: [4, 62],  // the same for the shadow
-		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-		});
-		var shelterIcon = L.icon({
-		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/accommodation/shelter.png',
-		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
-		    // iconSize:     [38, 95], // size of the icon
-		    // shadowSize:   [50, 64], // size of the shadow
-		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-		    // shadowAnchor: [4, 62],  // the same for the shadow
-		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-		});		
-		var peakIcon = L.icon({
-		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/place/peak.png',
-		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
-		    // iconSize:     [38, 95], // size of the icon
-		    // shadowSize:   [50, 64], // size of the shadow
-		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-		    // shadowAnchor: [4, 62],  // the same for the shadow
-		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-		});
-		
+		var markers = [];
+		var getIconUrl = function( item ){
+			if ( item.tourism === 'alpine_hut'){
+				return 'hut.png';
+			} else if ( item.amenity === 'shelter'){
+				return 'cabin-2.png';
+			} else if ( item.natural === 'peak' ){
+				return 'mountains.png';
+			} else if ( item.mountain_pass === 'yes'){
+				return 'mountain-pass.png';
+		    } else if ( item.amenity === 'drinking_water'){
+				return 'drinkingwater.png';
+			} else if ( item.tourism === 'viewpoint'){
+				return 'beautifulview.png';
+			} else {
+				return 'search-icon.png';
+			}
+		};
+	
 		var geo = L.geoJson([], {
 			pointToLayer: function( node, latlng ){
 				var icon = null;
-				if ( node.properties.tourism === 'alpine_hut'){
-					icon = hutIcon;
-				} else if ( node.properties.amenity === 'shelter'){
-					icon = shelterIcon;
-				} else if ( node.properties.natural === 'peak' ){
-					icon = peakIcon;
-				}
+				
+				
+				
+				
 				return L.marker( latlng, {icon: icon});
 			},
 			onEachFeature: function(node, layer){
@@ -227,13 +210,28 @@ Meteor.startup(function() {
 			filter: function(node, layer) {
 			   return (node.properties.tourism === 'alpine_hut')
 						|| (  node.properties.amenity === 'shelter' )
-						    ||  ( node.properties.natural === 'peak' );
+						    ||  ( node.properties.natural === 'peak' )
+								|| ( node.properties.mountain_pass === 'yes') ;
 			}
 		});
 		return {
 			ready: function(map) {
 				// add osm layer to map
 				geo.addTo(map);
+				
+				map.on('viewreset', function(){
+					// 0 max zoomout, 20 
+					// 9 px per 9 zoom
+					var zoom = map.getZoom();
+				    /*_.each( markers, function(marker){
+					   if (marker.iconUrl){
+						 marker.setIcon( L.icon({
+							iconUrl: marker.iconUrl,
+							iconSize:[ zoom*1.5, zoom*1.5]
+						 }));
+					   }
+					});*/
+				});
 
 				$.ajax({
 					url: 'https://api.mongohq.com/databases/osm/collections/node?_apikey=ad1r3nxynhxls3vfq5q9',
@@ -248,7 +246,22 @@ Meteor.startup(function() {
 									dataType: 'json',
 									success: function(data) {
 										_.each(data, function(node) {
-											geo.addData(node);
+											var url = getIconUrl( node.properties );
+											var popupContent = node.properties.name;
+											var coords = node.geometry.coordinates;
+											var latLan = new L.LatLng( coords[1], coords[0]);
+											var icon = L.icon({
+												iconUrl: url,
+												iconSize: [10, 10]
+											});
+											var marker = L.marker( latLan, {
+												icon: icon 
+											});
+											marker.iconUrl = url;
+											marker.bindPopup( JSON.stringify( node.properties ) );
+											marker.addTo( map );
+											// marker.iconUrl = url;
+											markers.push( marker );
 										});
 										callback(null, true);
 									},
