@@ -2,6 +2,11 @@
 
 Mappo is a web application based on Meteor (http://meteor.com/) to edit maps in real time.
 
+I have not written a documentation yet. You can find some preliminary considerations here:
+1. State of work: http://leibnizwheel.wordpress.com/2013/01/09/mappo-leaflet-mongodb-meteor-js/
+2. Some idea about ui: http://leibnizwheel.wordpress.com/2013/01/06/beyond-mvc/
+3. Initial motivations: http://leibnizwheel.wordpress.com/2012/09/08/meteor-js-for-geospatial-apps-some-experiments/
+
 ## Roadmap
 
 1. ~~Choice of background layers.~~
