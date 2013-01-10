@@ -164,34 +164,91 @@ Meteor.startup(function() {
 			}
 		};
 	});
+	
+		/*	{ 'tourism':'alpine_hut' },
+			{ 'amenity':'shelter' },
+			{ 'tourism':'information', 'attributes.information':'guidepost' },
+			{ 'natural':'peak' },
+			{ 'natural':'volcano' },
+			{ 'mountain_pass':'yes'},
+			{ 'tourism':'viewpoint'},
+			{ 'amenity':'drinking_water' } */
 
 	Core.define('osm', [], function(context) {
 		// response in MongoHQ cannot be bigger than 100 documents
 		var MAX_LIMIT = 100;
-		var geo = L.geoJson();
+		
+		var hutIcon = L.icon({
+		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/accommodation/alpine_hut.png',
+		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
+		    // iconSize:     [38, 95], // size of the icon
+		    // shadowSize:   [50, 64], // size of the shadow
+		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+		    // shadowAnchor: [4, 62],  // the same for the shadow
+		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});
+		var shelterIcon = L.icon({
+		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/accommodation/shelter.png',
+		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
+		    // iconSize:     [38, 95], // size of the icon
+		    // shadowSize:   [50, 64], // size of the shadow
+		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+		    // shadowAnchor: [4, 62],  // the same for the shadow
+		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});		
+		var peakIcon = L.icon({
+		    iconUrl: 'https://raw.github.com/openstreetmap/map-icons/master/classic.small/place/peak.png',
+		    // shadowUrl: 'http://leaflet.cloudmade.com/docs/images/leaf-shadow.png',
+		    // iconSize:     [38, 95], // size of the icon
+		    // shadowSize:   [50, 64], // size of the shadow
+		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+		    // shadowAnchor: [4, 62],  // the same for the shadow
+		    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		var geo = L.geoJson([], {
+			pointToLayer: function( node, latlng ){
+				var icon = null;
+				if ( node.properties.tourism === 'alpine_hut'){
+					icon = hutIcon;
+				} else if ( node.properties.amenity === 'shelter'){
+					icon = shelterIcon;
+				} else if ( node.properties.natural === 'peak' ){
+					icon = peakIcon;
+				}
+				return L.marker( latlng, {icon: icon});
+			},
+			onEachFeature: function(node, layer){
+				if (node.properties ) {
+					var text = node.properties.name;
+				    layer.bindPopup( text );
+				}
+			},
+			filter: function(node, layer) {
+			   return (node.properties.tourism === 'alpine_hut')
+						|| (  node.properties.amenity === 'shelter' )
+						    ||  ( node.properties.natural === 'peak' );
+			}
+		});
 		return {
 			ready: function(map) {
 				// add osm layer to map
 				geo.addTo(map);
-				// get information about this collection
+
 				$.ajax({
-					url: 'https://api.mongohq.com/databases/osm/collections/relation?_apikey=ad1r3nxynhxls3vfq5q9',
+					url: 'https://api.mongohq.com/databases/osm/collections/node?_apikey=ad1r3nxynhxls3vfq5q9',
 					dataType: 'json',
 					success: function(data) {
 						var count = data.count;
-						var ways = {};
 						var requests = [];
 						_.each(_.range(Math.ceil(count / MAX_LIMIT)), function(index) {
 							requests.push(function(callback) {
-								console.log('request ' + index);
 								$.ajax({
-									url: 'https://api.mongohq.com/databases/osm/collections/relation/documents?_apikey=ad1r3nxynhxls3vfq5q9&limit=100&skip=' + (index * 100),
+									url: 'https://api.mongohq.com/databases/osm/collections/node/documents?_apikey=ad1r3nxynhxls3vfq5q9&limit=100&skip=' + (index * MAX_LIMIT),
 									dataType: 'json',
 									success: function(data) {
-										_.each(data, function(relation) {
-											_.each(relation.members, function(member) {
-												ways[ member.ref ] = true;
-											});
+										_.each(data, function(node) {
+											geo.addData(node);
 										});
 										callback(null, true);
 									},
@@ -207,73 +264,15 @@ Meteor.startup(function() {
 							if (err) {
 								return console.log(err);
 							}
-							var keys = _.keys( ways );
-							// KEYS = keys;
-							var wayRequests = [];
-							// console.log( keys.length );
-							// console.log( Math.ceil(keys.length / 50) );
-							_.each(_.range(Math.ceil(keys.length / 50)), function(index) {
-									wayRequests.push(function(callback) {
-										// console.log( index + ': ' + JSON.stringify( keys.slice( index*50, (index+1)*50 ) ) );
-										var filter =  '{ "osmId": { "$in":' + JSON.stringify( keys.slice( index*50, (index+1)*50 ) ) + ' } }' ;	
-										$.ajax({
-											url: 'https://api.mongohq.com/databases/osm/collections/way/documents?_apikey=ad1r3nxynhxls3vfq5q9&q=' + encodeURIComponent( filter ),
-											success: function(data) {
-												_.each(data, function(way) {
-													geo.addData(way.geometry);
-												});
-												// console.log( filter );
-												callback(null, true);
-											},
-											failure: function(data) {
-												console.error(data);
-												callback(null, false);
-											}
-										});
-									});
-							});
-						   async.parallel( wayRequests, function(err, results){
-								if (err){
-									return console.error(err);
-								}
-						   });	
 						});
-						}, failure: function(data) {
-							console.error(data);
-						}
-					});
-
-/*$.ajax({
-					// max mongohq limit: 100 documents
-					url: 'https://api.mongohq.com/databases/osm/collections/relation/documents?_apikey=ad1r3nxynhxls3vfq5q9&limit=100',
-					dataType: 'json',
-					success: function( data ){
-						_.each( data, function( relation ){
-							_.each( relation.members, function(member){
-								var filter = encodeURIComponent('{ "osmId":"' + member.ref + '"}');
-								$.ajax({
-									url:'https://api.mongohq.com/databases/osm/collections/way/documents?_apikey=ad1r3nxynhxls3vfq5q9&q='+filter,
-									dataType:'json',
-									success: function( data ){
-										_.each( data, function(way){
-											geo.addData( way.geometry );
-										});
-									},
-									failure: function( data ){
-										console.log( data );
-									}
-								});
-							});
-						});
-					
 					},
-					failure: function( data ){
-						console.log( data );
+					failure: function(data) {
+						console.error(data);
 					}
-				});*/
-				}
-			};
-		});
+				});
+			}
+		};
+	});
 
 	Core.compose('mongo-draw', 'mongomap', 'draw');
 	Core.split('map', 'map-viewer', ['map-components', 'mongo-draw', 'osm']);
@@ -283,4 +282,4 @@ Meteor.startup(function() {
 	app.init();
 
 
-	});
+});
