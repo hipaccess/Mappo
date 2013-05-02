@@ -8,6 +8,8 @@ I have not written a documentation yet. You can find some preliminary considerat
 2. Some idea about ui: http://leibnizwheel.wordpress.com/2013/01/06/beyond-mvc/
 3. Initial motivations: http://leibnizwheel.wordpress.com/2012/09/08/meteor-js-for-geospatial-apps-some-experiments/
 
+A draft of a getting started tutorial: http://leibnizwheel.wordpress.com/2013/05/02/cat-js-building-large-scale-web-applications/
+
 ## Roadmap
 
 1. ~~Choice of background layers.~~
