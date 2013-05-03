@@ -1,4 +1,4 @@
-function drawLeafletPlugin(){
+drawLeafletPlugin = function(){
 	return {
 		loader: function(){
 			/*

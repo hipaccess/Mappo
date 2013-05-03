@@ -33,8 +33,8 @@ Meteor.startup(function () {
 				});			
 			});
 
-		});		*/
-	}
+		});		
+	}*/
 
 
 	

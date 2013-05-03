@@ -1,6 +1,6 @@
 // adapted from https://github.com/seelmann/leaflet-providers
 
-function providerLeafletPlugin() {
+providerLeafletPlugin = function() {
 	return {
 		loader: function() {
 			var providers = {};
