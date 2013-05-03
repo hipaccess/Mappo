@@ -27,7 +27,7 @@ Download the latest version of Mappo from github.
 * git clone https://github.com/mstn/Mappo.git
 * cd Mappo
 
-Since we are using third party packages on the client side, you need to install (http://oortcloud.github.io/meteorite/)[meteorite].
+Since we are using third party packages on the client side, you need to install [meteorite](http://oortcloud.github.io/meteorite/).
 
 * sudo npm install -g meteorite
 * mrt
