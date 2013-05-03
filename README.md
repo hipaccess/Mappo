@@ -22,21 +22,18 @@ A draft of a getting started tutorial: http://leibnizwheel.wordpress.com/2013/05
 
 ## Getting Started
 
-1. git clone https://github.com/mstn/Mappo.git
-2. cd Mappo
-3. [METEOR_HOME]/meteor
-4. connect to http://localhost:3000
+Download the latest version of Mappo from github.
 
-## UI Architecture
+* git clone https://github.com/mstn/Mappo.git
+* cd Mappo
 
-### Similar approaches
+Since we are using third party packages on the client side, you need to install (http://oortcloud.github.io/meteorite/)[meteorite].
 
-1. https://github.com/aurajs/aura
+* sudo npm install -g meteorite
+* mrt
 
-### Theory
+Now, you can connect to http://localhost:3000 to see Mappo running.
 
-1. Geometry of Interaction
-2. Game semantics
 
 ## License
 
