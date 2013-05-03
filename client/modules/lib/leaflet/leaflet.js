@@ -1,3 +1,8 @@
+/*
+ *  this is a leaflet plugin manager
+ *
+ */
+
 (function( window, undefined ) {
 	
 	var Leaflet = {};

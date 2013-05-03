@@ -12,13 +12,7 @@ A draft of a getting started tutorial: http://leibnizwheel.wordpress.com/2013/05
 
 ## Roadmap
 
-1. ~~Choice of background layers.~~
-2. Integration with Open Street Map.
-3. Searching.
-4. Print and export maps.
-5. Adding notes.
-6. Online chat.
-7. Authentication.
+Click [Here](https://trello.com/board/mappo-roadmap/51838793a5a3850979002812) to see the roadmap and add feedback and suggestions.
 
 ## Getting Started
 
