@@ -18,6 +18,9 @@ Cat.define('mongo-collection', function(context) {
 		create: function(layer) {
 			var feature = Util.formats.GeoJson.layerToGeometry(layer);
 			features.insert(feature);
+		},
+		addGeoJSon: function(json){
+			features.insert(json);
 		}
 
 	};

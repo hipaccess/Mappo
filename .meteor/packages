@@ -10,3 +10,5 @@ bootstrap
 jquery
 http
 leaflet
+jquery-ui-bootstrap
+jquery-ui
