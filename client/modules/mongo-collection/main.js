@@ -19,9 +19,9 @@ Cat.define('mongo-collection', function(context, options) {
 				added: function(feature, beforeIndex) {
 					var layer = L.GeoJSON.geometryToLayer(feature);
 					
-					if ( layer.setIcon ){
+					if ( layer.setIcon && feature.properties){
 						var icon = L.icon({
-							iconUrl: 'mountains.png',
+							iconUrl: options.icons(feature.properties),
 							iconSize: [20, 20]
 						});
 						layer.setIcon( icon );
