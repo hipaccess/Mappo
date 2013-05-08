@@ -15,7 +15,7 @@ Meteor.startup(function() {
 					       { name:'mongo-collection',
 					         collection:'features' }
 					     ),
-					     ['create, addGeoJSon']
+					     ['create']
 				     )
 			      )
 			   );

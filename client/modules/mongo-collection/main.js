@@ -19,23 +19,31 @@ Cat.define('mongo-collection', function(context, options) {
 				added: function(feature, beforeIndex) {
 					var layer = L.GeoJSON.geometryToLayer(feature);
 					
-					var icon = L.icon({
-						iconUrl: 'mountains.png',
-						iconSize: [20, 20]
-					});
-					layer.setIcon( icon );
+					if ( layer.setIcon ){
+						var icon = L.icon({
+							iconUrl: 'mountains.png',
+							iconSize: [20, 20]
+						});
+						layer.setIcon( icon );
+					}
+					
 					
 					group.addLayer(layer);
 				}
 			});
 			map.addLayer(group);
 		},
-		create: function(layer) {
-			var feature = Util.formats.GeoJson.layerToGeometry(layer);
+		create: function(item) {
+			if ( Util.formats.GeoJson.isGeoJson( item) ){
+			   features.insert(item);
+			   return;
+			}
+			// attempts to convert layer to json
+			var feature = Util.formats.GeoJson.layerToGeometry(item);
+			if ( !feature ){
+				throw 'Cannot add feature ' + JSON.stringigy(item) + '.';
+			}
 			features.insert(feature);
-		},
-		addGeoJSon: function(json){
-			features.insert(json);
 		}
 
 	};

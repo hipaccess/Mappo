@@ -57,7 +57,7 @@ Cat.define('search', function(context) {
 				  );
 	           },
 	           select: function( event, ui ) {
-		          context.trigger('addGeoJSon', ui.item.waypoint.geometry );
+		          context.trigger('create', ui.item.waypoint );
 		          $(this).val('');
 		          return false;
 	           },

@@ -64,8 +64,13 @@
 				return createPoint(layer);
 			} else {
 				console.error('not supported layer');
+				return null;
 			}
 		    
+	};
+	
+	Util.formats.GeoJson.isGeoJson = function( item ){
+		return item.type === 'Feature';
 	};
 	
 }).call(this);
