@@ -10,6 +10,13 @@ Cat.define('mongo-collection', function(context) {
 			features.find().observe({
 				added: function(feature, beforeIndex) {
 					var layer = L.GeoJSON.geometryToLayer(feature);
+					
+					var icon = L.icon({
+						iconUrl: 'mountains.png',
+						iconSize: [10, 10]
+					});
+					layer.setIcon( icon );
+					
 					group.addLayer(layer);
 				}
 			});

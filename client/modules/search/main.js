@@ -10,7 +10,8 @@ Cat.define('search', function(context) {
 	
 	   options: {
 		  placeholder:'Search...',
-		  buttonLabel:'Search'
+		  buttonLabel:'Search',
+		  position: 'topleft'
 	   },
 	   
 	   initialize: function(options) {
@@ -34,6 +35,12 @@ Cat.define('search', function(context) {
 		  return this;		
 	   },
 	
+	   collapse: function(){
+		  this._input.style.display = 'none';
+		  L.DomUtil.removeClass(this._container, 'search-exp');
+		  return this;
+	   },
+	
 	   _createInput: function (text, className) {
 		   var input = L.DomUtil.create('input', className, this._container);
 		   input.type = 'text';
@@ -51,14 +58,17 @@ Cat.define('search', function(context) {
 	           },
 	           select: function( event, ui ) {
 		          context.trigger('addGeoJSon', ui.item.waypoint.geometry );
-		          input.value = '';
+		          $(this).val('');
+		          return false;
 	           },
-	           // hide helper text
+	           // hide helper texts
 			   messages: {
 			        noResults: '',
 			        results: function() {}
 			    }
            });
+           L.DomEvent
+			.disableClickPropagation(input);
 
 		   return input;
 	   },
@@ -82,6 +92,7 @@ Cat.define('search', function(context) {
 				this.expand();
 			} else {
 				// hide
+				this.collapse();
 		    }		
 	   }
 	
