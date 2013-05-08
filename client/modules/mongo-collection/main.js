@@ -19,12 +19,13 @@ Cat.define('mongo-collection', function(context, options) {
 				added: function(feature, beforeIndex) {
 					var layer = L.GeoJSON.geometryToLayer(feature);
 					
-					if ( layer.setIcon && feature.properties){
+					if ( layer instanceof L.Marker ){
 						var icon = L.icon({
 							iconUrl: options.icons(feature.properties),
 							iconSize: [20, 20]
 						});
 						layer.setIcon( icon );
+						layer.bindPopup( JSON.stringify( feature.properties ) );
 					}
 					
 					
