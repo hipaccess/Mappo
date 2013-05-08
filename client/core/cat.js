@@ -21,11 +21,17 @@
 	     if ( m.isModule ){
 		    return m;
 	     }
-	     if (typeof m === 'string' ){
+	     if ( _.isString(m) ){
 		    if (! modules[m] || !modules[m].isModule ){
 				throw 'Cannot find module with name ' + m + '.';
 		    }
 		    return modules[m];
+	     }
+	     if ( _.isObject(m) ){
+		     if ( _.isUndefined(m.name) || ! modules[ m.name] ){
+			   throw 'No module with name ' + m.name + '.';
+		     }
+		     return modules[m.name];
 	     }
 	     throw 'Object ' + m.toString() + ' is not a module.';
     };
@@ -75,6 +81,7 @@
          */
         seq: function(m, n){
 	        var name = generateName();
+	        var mOpts = m, nOpts = n;
 	        m = findModule(m); n = findModule(n);
             return modules[ name ] = {
                 name: name,
@@ -82,8 +89,8 @@
                 kind: 'SEQ',
                 children: [ m, n ],
                 builder: function(context){         
-                    var nInstance = n.builder( context );
-                    var mInstance = m.builder( new Context( nInstance ) );
+                    var nInstance = n.builder( context, nOpts );
+                    var mInstance = m.builder( new Context( nInstance ), mOpts );
                     return _.extend({}, mInstance);            
                 }
             };
@@ -98,6 +105,7 @@
          */
         dot: function(m, n){
 	        var name = generateName();
+	        var mOpts = m, nOpts = n;
             m = findModule(m); n = findModule(n);
             return modules[ name ] = {
                 name: name,
@@ -105,8 +113,8 @@
                 kind: 'DOT',
                 children: [m, n],
                 builder:function( context ){
-	                var nInstance = n.builder( context );
-	                var mInstance = m.builder( context );
+	                var nInstance = n.builder( context, nOpts );
+	                var mInstance = m.builder( context, mOpts );
                     var dot = {};
                     // TODO probably it is not the best way to do it!
                     _.each(
@@ -130,6 +138,7 @@
          */
         trace: function(m, events){
 	       var name = generateName();
+	       var mOpts = m;
            m = findModule(m);
            return modules[ name] = {
                name: name,
@@ -138,7 +147,7 @@
                children: [m],
                builder: function( context ){
                    var mCtx = _.clone( context );
-                   var mInstance = m.builder(mCtx);
+                   var mInstance = m.builder(mCtx, mOpts);
                    mCtx.listen(events, mInstance);
                    return mInstance;
                }
@@ -153,6 +162,7 @@
          */
         intc: function(m, n){
 	      var name = generateName();
+	      var mOpts = m, nOpts = n;
           m = findModule(m); n = findModule(n);
           return modules[ name  ] = {
               name: name,
@@ -161,8 +171,8 @@
               children: [m, n],
               builder: function( context ){
                   var ctx = _.clone( context );
-                  var nInstance = n.builder( ctx );
-                  var mInstance = m.builder( ctx );
+                  var nInstance = n.builder( ctx, nOpts );
+                  var mInstance = m.builder( ctx, mOpts );
                   var dot = _.extend( mInstance, nInstance);
                   ctx.listen( _.keys(nInstance), nInstance );
                   ctx.listen( _.keys(mInstance), mInstance );

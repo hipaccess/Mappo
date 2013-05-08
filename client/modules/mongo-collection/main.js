@@ -2,9 +2,17 @@
  *  this module adds created feature to a mongodb collection and displays them within a leaflet group
  */
 
-Cat.define('mongo-collection', function(context) {
+Cat.define('mongo-collection', function(context, options) {
+	var collectionName = options.collection;
 	var group = L.geoJson(null, null);
-	var features = Collections.get('features');
+	var features;
+	if ( !collectionName ){
+		throw 'You must specify a collection name in mongo-collection module.';
+	}
+	if ( Collections.has( collectionName) ){
+		console.warn('Loading collection ' + collectionName + ' in module ' + options.name + '. Another module is using this collection.');
+	}	
+	features = Collections.get(collectionName);
 	return {
 		ready: function(map) {
 			features.find().observe({
@@ -13,7 +21,7 @@ Cat.define('mongo-collection', function(context) {
 					
 					var icon = L.icon({
 						iconUrl: 'mountains.png',
-						iconSize: [10, 10]
+						iconSize: [20, 20]
 					});
 					layer.setIcon( icon );
 					

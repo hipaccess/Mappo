@@ -99,7 +99,7 @@ Cat.define('search', function(context) {
 	
 	});
 
-    var searchControl = new Search;
+    var searchControl = new Search();
 
 	return {
 		ready: function(map) {

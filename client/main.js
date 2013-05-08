@@ -2,14 +2,23 @@
 Meteor.startup(function() {
 
      // create the structure of Mappo app
-     var app = Cat.intc( 'map-viewer', 
-                  Cat.dot('map-providers',
-                    Cat.dot(
-					  Cat.dot('draw', 'mongo-collection'),
-					  Cat.dot('search', 'mongo-collection')
-					)
-				  )
-               );
+	var app = Cat.intc( 
+		          { name:'map-viewer' },
+		          Cat.dot(
+			         { name:'map-providers' },
+			         Cat.trace(
+			             Cat.dot(
+				           Cat.dot(
+					         { name:'draw' },
+					         { name:'search' }
+					       ),
+					       { name:'mongo-collection',
+					         collection:'features' }
+					     ),
+					     ['create, addGeoJSon']
+				     )
+			      )
+			   );
      // start the app and render it in body element
      Cat.start( app ).render($('body'));
 

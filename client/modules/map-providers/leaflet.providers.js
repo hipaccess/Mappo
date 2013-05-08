@@ -1,9 +1,12 @@
 // adapted from https://github.com/seelmann/leaflet-providers
 
 providerLeafletPlugin = function() {
+
+	
 	return {
 		loader: function() {
 			var providers = {};
+			
 
 			L.TileLayer.Provider = L.TileLayer.extend({
 				initialize: function(arg) {
