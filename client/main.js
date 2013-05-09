@@ -9,31 +9,34 @@ Meteor.startup(function() {
 			         Cat.trace(
 			             Cat.dot(
 				           Cat.dot(
-					         { name:'info-control' },
+					         { name:'draw' },
 					         { name:'search' }
 					       ),
-					       { name:'mongo-collection',
-					         collection:'features',
-					         icons: function( node ){
-								if ( node.tourism === 'alpine_hut'){
+					       Cat.dot(
+					       	 { name:'mongo-collection',
+					           collection:'features',
+					           icons: function( node ){
+								  if ( node.tourism === 'alpine_hut'){
 									return 'hut.png';
-								} else if ( node.amenity === 'shelter'){
+								  } else if ( node.amenity === 'shelter'){
 									return 'cabin-2.png';
-								} else if ( node.natural === 'peak' ){
+								  } else if ( node.natural === 'peak' ){
 									return 'mountains.png';
-								} else if ( node.mountain_pass === 'yes'){
+								  } else if ( node.mountain_pass === 'yes'){
 									return 'mountain-pass.png';
-							    } else if ( node.amenity === 'drinking_water'){
+							      } else if ( node.amenity === 'drinking_water'){
 									return 'drinkingwater.png';
-								} else if ( node.tourism === 'viewpoint'){
+								  } else if ( node.tourism === 'viewpoint'){
 									return 'beautifulview.png';
-								} else {
+								  } else {
 									return 'unknown.png';
-								}
-							 }
-					       }
+								  }
+							    }
+					         },
+					         { name:'info-control' }
+					        )
 					     ),
-					     ['create']
+					     ['create', 'show', 'hide']
 				     )
 			      )
 			   );

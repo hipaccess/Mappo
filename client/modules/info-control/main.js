@@ -16,7 +16,7 @@ Cat.define('info-control', function(context) {
 
 	// method that we will use to update the control based on feature properties passed
 	info.update = function (props) {
-	    this._div.innerHTML = Template.details();
+	    this._div.innerHTML = Template.details(props);
 	};
 	
 	
@@ -24,6 +24,12 @@ Cat.define('info-control', function(context) {
 		
 		ready: function( map ){
 			info.addTo(map);
+		},
+		show: function( feature ){
+			info.update( feature.properties );
+		},
+		hide: function( ){
+			info.update();
 		}
 		
 	};

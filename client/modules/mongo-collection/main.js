@@ -3,8 +3,28 @@
  */
 
 Cat.define('mongo-collection', function(context, options) {
+	function highlightFeature(e) {
+	    var layer = e.target;
+	    context.trigger('show', layer.feature);
+	}
+	function resetHighlight(e) {
+	    group.resetStyle(e.target);
+	    context.trigger('hide');
+	}
+	function zoomToFeature(e) {
+	    // map.fitBounds(e.target.getBounds());
+	}
+	function onEachFeature(feature, layer) {
+	    layer.on({
+	        mouseover: highlightFeature,
+	        mouseout: resetHighlight,
+	        click: zoomToFeature
+	    });
+	}
 	var collectionName = options.collection;
-	var group = L.geoJson(null, null);
+	var group = L.geoJson(null, {
+		onEachFeature:onEachFeature
+	});
 	var features;
 	if ( !collectionName ){
 		throw 'You must specify a collection name in mongo-collection module.';
@@ -24,8 +44,14 @@ Cat.define('mongo-collection', function(context, options) {
 							iconUrl: options.icons(feature.properties),
 							iconSize: [20, 20]
 						});
+						layer.feature = feature;
 						layer.setIcon( icon );
 						layer.bindPopup( JSON.stringify( feature.properties ) );
+						layer.on({
+					        mouseover: highlightFeature,
+					        mouseout: resetHighlight,
+					        click: zoomToFeature
+					    });
 					}
 					
 					
