@@ -9,7 +9,7 @@ Meteor.startup(function() {
 			         Cat.trace(
 			             Cat.dot(
 				           Cat.dot(
-					         { name:'draw' },
+					         { name:'info-control' },
 					         { name:'search' }
 					       ),
 					       { name:'mongo-collection',
