@@ -12,9 +12,9 @@
     },
     "packages": {
       "leaflet": {
-        "git": "https://github.com/bevanhunt/meteor-leaflet.git",
+        "git": "https://github.com/hipaccess/meteor-leaflet.git",
         "tag": "v0.1.8",
-        "commit": "8a3d0f53734e4fe3efc3e6e39aa3da0209e2ec8e"
+        "commit": "3358b1af95008d9b45824a957859c132051e1cb3"
       },
       "jquery-ui": {
         "git": "https://github.com/TimHeckel/meteor-jquery-ui.git",
