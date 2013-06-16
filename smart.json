@@ -1,7 +1,7 @@
 {
   "packages": {
     "leaflet": {
-      "git": "https://github.com/hipacess/Mappo"
+      "git": "https://github.com/hipacess/meteor-leaflet"
     },
     "jquery-ui": {},
     "jquery-ui-bootstrap": {}
