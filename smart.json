@@ -1,6 +1,8 @@
 {
   "packages": {
-    "leaflet": {},
+    "leaflet": {
+      "git": "https://github.com/hipacess/Mappo"
+    },
     "jquery-ui": {},
     "jquery-ui-bootstrap": {}
   }
